@@ -4,7 +4,7 @@ import { Length, IsUrl, IsCurrency, MaxLength, IsInt } from 'class-validator';
 import { User } from 'src/users/user.entity';
 import { Offer } from 'src/offers/offer.entity';
 import { WishList } from 'src/wishlists/wishlist.entity';
-@Entity()
+@Entity({ schema: 'nest_project' })
 export class Wish extends BaseEntity {
   @Column()
   @Length(1, 250)

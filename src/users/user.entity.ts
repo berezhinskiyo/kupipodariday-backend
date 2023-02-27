@@ -1,13 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from '../base_entity/base_entity.entity';
-import { IsEmail, Length, IsUrl, isEmail } from 'class-validator';
+import { IsEmail, Length, IsUrl, isEmail, IsNotEmpty } from 'class-validator';
 import { Wish } from 'src/wishes/wish.entity';
 import { WishList } from 'src/wishlists/wishlist.entity';
 import { Offer } from 'src/offers/offer.entity';
 
-@Entity()
+@Entity({ schema: 'nest_project' })
 export class User extends BaseEntity {
   @Column()
+  @IsNotEmpty()
   @Length(2, 30)
   username: string;
 
@@ -20,10 +21,12 @@ export class User extends BaseEntity {
   avatar: string;
 
   @Column()
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 
   @Column()
+  @IsNotEmpty()
   password: string;
 
   @OneToMany(() => Wish, (wish) => wish.owner)

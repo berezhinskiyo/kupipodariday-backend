@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { Offer } from './offers/offer.entity';
@@ -10,34 +8,49 @@ import { UsersController } from './users/users.controller';
 import { OffersController } from './offers/offers.controller';
 import { WishesController } from './wishes/wishes.controller';
 import { WishlistsController } from './wishlists/wishlists.controller';
-import { UsersService } from './users/users.service';
-import { WishlistsService } from './wishlists/wishlists.service';
-import { WishesService } from './wishes/wishes.service';
-import { OffersService } from './offers/offers.service';
 import { OffersModule } from './offers/offers.module';
 import { UsersModule } from './users/users.module';
 import { WishesModule } from './wishes/wishes.module';
 import { WishlistsModule } from './wishlists/wishlists.module';
+import configuration from './configuration';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as Joi from 'joi';
+import { AuthModule } from './auth/auth.module';
+import { AuthController } from './auth/auth.controller';
+const schema = Joi.object({
+  database: Joi.object({
+    host: Joi.string().required(),
+    port: Joi.number().integer().required(),
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+    schema: Joi.string().required(),
+  }),
+});
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'student',
-      password: 'student',
-      database: 'nest_project',
-      entities: [User, Offer, Wish, WishList],
-      synchronize: false,
-      schema: 'nest_project',
+    ConfigModule.forRoot({ validationSchema: schema, load: [configuration] }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('database.host'),
+        port: configService.get<number>('database.PORT'),
+        username: configService.get<string>('database.username'),
+        password: configService.get<string>('database.password'),
+        database: configService.get<string>('database.schema'),
+        schema: configService.get<string>('database.schema'),
+        entities: [User, Offer, Wish, WishList],
+        synchronize: false,
+      }),
+      inject: [ConfigService],
     }),
     OffersModule,
     UsersModule,
     WishesModule,
     WishlistsModule,
+    AuthModule,
   ],
-  controllers: [AppController, UsersController, OffersController, WishesController, WishlistsController],
-  providers: [AppService, UsersService, WishlistsService, WishesService, OffersService],
+
 })
 export class AppModule { }
