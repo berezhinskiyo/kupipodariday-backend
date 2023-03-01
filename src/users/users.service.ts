@@ -11,8 +11,8 @@ export class UsersService extends TypeOrmCrudService<User> {
     super(usersRepository);
   }
   async create(createUserDto: CreateUserDto) {
-    const user = await this.repo.create(createUserDto);
 
+    const user = await this.repo.create(createUserDto);
     return this.repo.save(user);
   }
 

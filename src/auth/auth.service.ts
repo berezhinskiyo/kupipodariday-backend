@@ -8,16 +8,17 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private usersService: UsersService,
-  ) {}
+  ) { }
 
   auth(user: User) {
+    console.log(user);
     const payload = { sub: user.id };
-
+    
     return { access_token: this.jwtService.sign(payload) };
   }
 
   async validatePassword(username: string, password: string) {
-    const user = await this.usersService.findByUsername(username); 
+    const user = await this.usersService.findByUsername(username);
 
     /* В идеальном случае пароль обязательно должен быть захэширован */
     if (user && user.password === password) {

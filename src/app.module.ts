@@ -4,10 +4,6 @@ import { User } from './users/user.entity';
 import { Offer } from './offers/offer.entity';
 import { Wish } from './wishes/wish.entity';
 import { WishList } from './wishlists/wishlist.entity';
-import { UsersController } from './users/users.controller';
-import { OffersController } from './offers/offers.controller';
-import { WishesController } from './wishes/wishes.controller';
-import { WishlistsController } from './wishlists/wishlists.controller';
 import { OffersModule } from './offers/offers.module';
 import { UsersModule } from './users/users.module';
 import { WishesModule } from './wishes/wishes.module';
@@ -16,7 +12,7 @@ import configuration from './configuration';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { AuthModule } from './auth/auth.module';
-import { AuthController } from './auth/auth.controller';
+
 const schema = Joi.object({
   database: Joi.object({
     host: Joi.string().required(),
