@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateWishDto } from './dto/create-wishes.dto';
 import { WishesService } from './wishes.service';
 
@@ -27,7 +27,10 @@ export class WishesController {
     deleteUser(@Param('id') id: number) {
         return this.wishesService.delete(id);
     }
-
+    @Patch(':id')
+    update(@Param('id') id: number, @Body() wish: CreateWishDto) {
+        return this.wishesService.update(id, wish);
+    }
     @Post(':id/copy')
     copy(@Param('id') id: number) {
         return this.wishesService.copy(id);

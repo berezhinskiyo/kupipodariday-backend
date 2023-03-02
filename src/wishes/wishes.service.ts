@@ -44,4 +44,11 @@ export class WishesService extends TypeOrmCrudService<Wish> {
   async delete(id: number) {
     return await this.repo.delete({ id });
   }
+
+  async update(id: number, updateWishDto: CreateWishDto) {
+
+    const user = await this.repo.update(id, updateWishDto);
+
+    return user;
+  }
 }
