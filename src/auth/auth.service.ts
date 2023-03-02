@@ -13,7 +13,7 @@ export class AuthService {
   auth(user: User) {
     console.log(user);
     const payload = { sub: user.id };
-    
+
     return { access_token: this.jwtService.sign(payload) };
   }
 
@@ -25,6 +25,16 @@ export class AuthService {
       /* Исключаем пароль из результата */
       const { password, ...result } = user;
 
+      return result;
+    }
+
+    return null;
+  }
+  async validateUserId(id: number) {
+    const user = await this.usersService.findById(id);
+
+    if (user) {
+      const { password, ...result } = user;
       return result;
     }
 

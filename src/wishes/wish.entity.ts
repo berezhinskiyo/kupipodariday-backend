@@ -19,6 +19,10 @@ export class Wish extends BaseEntity {
   image: string;
 
   @Column()
+  @IsUrl()
+  link: string;
+
+  @Column()
   @IsCurrency()
   price: number;
 

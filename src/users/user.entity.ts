@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from '../base_entity/base_entity.entity';
 import { IsEmail, Length, IsUrl, isEmail, IsNotEmpty } from 'class-validator';
 import { Wish } from 'src/wishes/wish.entity';
