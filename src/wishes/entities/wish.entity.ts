@@ -1,10 +1,9 @@
-import { Entity, Column, ManyToOne, ManyToMany, OneToMany, JoinTable, JoinColumn, AfterLoad, AfterInsert, AfterUpdate } from 'typeorm';
+import { Entity, Column, ManyToOne, ManyToMany, OneToMany, JoinTable, JoinColumn, AfterLoad } from 'typeorm';
 import { BaseEntity } from '../../base_entity/base_entity.entity';
 import { Length, IsUrl, IsNotEmpty, IsOptional } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
 import { WishList } from 'src/wishlists/entities/wishlist.entity';
-import { Expose } from 'class-transformer';
 @Entity({ schema: 'nest_project' })
 export class Wish extends BaseEntity {
   @Column()
@@ -39,7 +38,6 @@ export class Wish extends BaseEntity {
 
   @AfterLoad()
   generateRaised(): void {
-    console.log(this);
     this.raised = this.offers ? this.offers.reduce((sum, current) => sum + current.amount, 0) : 0;
   }
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get,  Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateWishDto } from './dto/create-wishes.dto';
 import { WishesService } from './wishes.service';
