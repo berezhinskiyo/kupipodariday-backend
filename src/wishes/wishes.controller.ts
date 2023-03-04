@@ -1,37 +1,45 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { CreateWishDto } from './dto/create-wishes.dto';
 import { WishesService } from './wishes.service';
 
 @Controller('wishes')
+
 export class WishesController {
     constructor(private wishesService: WishesService) { }
 
     @Post()
-    insert(@Body() wish: CreateWishDto) {
-        return this.wishesService.create(wish);
+    @UseGuards(AuthGuard('jwt'))
+    insert(@Body() wish: CreateWishDto, @Request() req: any) {
+        return this.wishesService.create(req.user.id, wish);
     }
     @Get('last')
     getLast() {
         return this.wishesService.getLast();
     }
-    @Get('first')
+    @Get('top')
     getFirst() {
-        return this.wishesService.getLast();
+        return this.wishesService.getTop();
     }
     @Get(':id')
+    @UseGuards(AuthGuard('jwt'))
     getUser(@Param('id') id: number) {
         return this.wishesService.findById(id);
     }
 
     @Delete(':id')
-    deleteUser(@Param('id') id: number) {
-        return this.wishesService.delete(id);
+    @UseGuards(AuthGuard('jwt'))
+    deleteUser(@Param('id') id: number, @Request() req: any) {
+        return this.wishesService.delete(req.user.id, id);
+
     }
     @Patch(':id')
-    update(@Param('id') id: number, @Body() wish: CreateWishDto) {
-        return this.wishesService.update(id, wish);
+    @UseGuards(AuthGuard('jwt'))
+    update(@Param('id') id: number, @Body() wish: CreateWishDto, @Request() req: any) {
+        return this.wishesService.update(req.user.id, id, wish);
     }
     @Post(':id/copy')
+    @UseGuards(AuthGuard('jwt'))
     copy(@Param('id') id: number) {
         return this.wishesService.copy(id);
     }

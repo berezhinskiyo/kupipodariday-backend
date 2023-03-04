@@ -1,10 +1,10 @@
 import {
     IsBoolean,
-    IsCurrency,
     IsInt,
+    IsNumber,
 } from 'class-validator';
 export class CreateOfferDto {
-    @IsCurrency()
+    @IsNumber()
     amount: number;
 
     @IsBoolean()

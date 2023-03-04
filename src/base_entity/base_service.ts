@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+
 import { Repository } from 'typeorm';
-import { BaseEntity } from './base_entity.entity';
+
 
 export abstract class BaseService<T> {
-  constructor(private repo: Repository<T>) {}
+  constructor(private repo: Repository<T>) { }
 
   find(): Promise<T[]> {
     return this.repo.find();

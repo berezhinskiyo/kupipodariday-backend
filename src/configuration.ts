@@ -7,5 +7,6 @@ export default () => ({
     port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
 
   },
-  jwt_secret: process.env.JWT_SECRET
+  jwt_secret: process.env.JWT_SECRET,
+  salt:process.env.SALT
 });

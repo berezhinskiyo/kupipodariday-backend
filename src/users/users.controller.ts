@@ -1,6 +1,5 @@
 import { Controller, Get, UseGuards, Request, Patch, Body, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { use } from 'passport';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
@@ -22,9 +21,13 @@ export class UsersController {
     getWishes(@Request() req: any) {
         return this.usersService.getWishes(req.user.id);
     }
+    @Get('find')
+    getUsers(@Body() user: { query: string }) {
+        return this.usersService.findMany([{ username: user.query }, { email: user.query }]);
+    }
     @Get(':username')
     getUser(@Param('username') username: string) {
-        return this.usersService.findByUsername(username);
+        return this.usersService.findByUsernameWithoutPassword(username);
     }
 
     @Get(':username/wishes')
@@ -32,8 +35,5 @@ export class UsersController {
         return this.usersService.getWishesByUsername(username);
     }
 
-    @Get('find')
-    getUsers(@Body() user: { query: string }) {
-        return this.usersService.findMany([{ username: user.query }, { email: user.query }]);
-    }
+
 }

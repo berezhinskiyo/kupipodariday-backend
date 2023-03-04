@@ -1,11 +1,6 @@
 import {
-    IsCurrency,
-    IsNotEmpty,
-    IsNumber,
-    IsString,
     IsUrl,
     Length,
-    MinLength
 } from 'class-validator';
 
 export class CreateWishDto {
@@ -13,7 +8,7 @@ export class CreateWishDto {
     name: string;
 
     @Length(1, 1024)
-    description: 1500;
+    description: string;
 
     @IsUrl()
     image: string;
@@ -21,6 +16,5 @@ export class CreateWishDto {
     @IsUrl()
     link: string;
 
-    @IsCurrency()
     price: number;
 }

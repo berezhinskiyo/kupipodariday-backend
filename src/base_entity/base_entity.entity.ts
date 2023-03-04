@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import { PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn()
@@ -6,7 +6,7 @@ export abstract class BaseEntity {
 
   @CreateDateColumn({ type: 'timestamp without time zone', default: 'NOW()' })
   createdAt: Date
-  
+
   @CreateDateColumn({ type: 'timestamp without time zone', onUpdate: 'NOW()', nullable: true })
   updatedAt: Date
 }

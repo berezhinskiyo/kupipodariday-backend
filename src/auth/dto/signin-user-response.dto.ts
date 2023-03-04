@@ -1,8 +1,7 @@
 import {
     IsNotEmpty,
     IsString,
-    Length,
-    MinLength
+    Length
 } from 'class-validator';
 
 export class SigninUserResponseDto {

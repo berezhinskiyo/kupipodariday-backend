@@ -1,15 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { genSaltSync, hash } from 'bcrypt';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService extends TypeOrmCrudService<User> {
-  constructor(@InjectRepository(User) usersRepository: Repository<User>) {
+  constructor(@InjectRepository(User) usersRepository: Repository<User>,
+    private configService: ConfigService) {
     super(usersRepository);
+  }
+  deletePasswordAndEmail = (user: User) => {
+    if (user) {
+      delete user['password'];
+      delete user['email'];
+    }
   }
   async create(createUserDto: CreateUserDto) {
 
@@ -18,20 +27,34 @@ export class UsersService extends TypeOrmCrudService<User> {
   }
 
   async findMany(query: FindOptionsWhere<User> | FindOptionsWhere<User>[]) {
-    const user = await this.repo.find({ where:  query  });
-    return user;
+    const users = await this.repo.find({ where: query, relations: { wishes: true, offers: true, wishLists: true } });
+    users.forEach((user) => this.deletePasswordAndEmail(user));
+    return users;
   }
 
   async findByUsername(username: string) {
-    const user = await this.repo.findOne({ where: { username } });
-    delete user['password'];
+    const user = await this.repo.findOne({
+      where: { username }
+
+    });
+    return user;
+  }
+
+  async findByUsernameWithoutPassword(username: string) {
+    const user = await this.repo.findOne({
+      where: { username }
+
+    });
+    this.deletePasswordAndEmail(user);
     return user;
   }
 
   async findById(id: number) {
 
-    const user = await this.repo.findOne({ where: { id } });
-    delete user['password'];
+    const user = await this.repo.findOne({
+      where: { id }
+    });
+    if (user) delete user['password'];
     return user;
   }
 
@@ -39,9 +62,9 @@ export class UsersService extends TypeOrmCrudService<User> {
 
     const user = await this.repo.findOne({
       where: { id },
-      relations: { wishes: true, offers: true, wishlists: true }
+      relations: { wishes: true, offers: true, wishLists: true }
     });
-    delete user['password'];
+    this.deletePasswordAndEmail(user)
     return user;
   }
 
@@ -49,16 +72,17 @@ export class UsersService extends TypeOrmCrudService<User> {
 
     const user = await this.repo.findOne({
       where: { username },
-      relations: { wishes: true, offers: true, wishlists: true }
+      relations: { wishes: true, offers: true, wishLists: true }
     });
-    delete user['password'];
+    this.deletePasswordAndEmail(user)
     return user;
   }
+
   async update(id: number, obj: UpdateUserDto) {
 
-    const user = await this.repo.update(id, obj);
-    delete user['password'];
-
-    return user;
+    const salt = Number.parseInt(this.configService.get<string>('salt'));
+    obj.password = await hash(obj.password, await genSaltSync(salt));
+    await this.repo.update(id, obj);
+    return await this.findById(id);
   }
 }
