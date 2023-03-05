@@ -11,7 +11,7 @@ import { WishlistsController } from './wishlists.controller';
 import { WishlistsService } from './wishlists.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([WishList]), TypeOrmModule.forFeature([Wish]), TypeOrmModule.forFeature([User]), PassportModule],
+    imports: [TypeOrmModule.forFeature([WishList, Wish, User]), PassportModule],
     exports: [WishlistsService],
     providers: [ConfigService, WishesService, UsersService, WishlistsService],
     controllers: [WishlistsController],

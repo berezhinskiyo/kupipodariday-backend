@@ -11,7 +11,7 @@ import { OffersController } from './offers.controller';
 import { OffersService } from './offers.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Offer]), TypeOrmModule.forFeature([Wish]), TypeOrmModule.forFeature([User]), PassportModule],
+    imports: [TypeOrmModule.forFeature([Offer, Wish, User]), PassportModule],
     exports: [OffersService],
     providers: [ConfigService, OffersService, WishesService, UsersService],
     controllers: [OffersController],

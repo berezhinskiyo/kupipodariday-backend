@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Request, HttpException, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Request } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
@@ -27,17 +27,13 @@ export class WishlistsController {
 
     @Patch(':id')
     update(@Param('id') id: number, @Body() wishlistDto: UpdateWishlistDto, @Request() req: any) {
-        const res = this.wishlistsService.update(req.user.id, id, wishlistDto);
-        if (res)
-            return res;
-        else throw new HttpException('Нельзя обновлять чужой список', HttpStatus.UNPROCESSABLE_ENTITY);
+        return this.wishlistsService.update(req.user.id, id, wishlistDto);
+
     }
 
     @Delete(':id')
     deleteUser(@Param('id') id: number, @Request() req: any) {
-        const res = this.wishlistsService.delete(req.user.id, id);
-        if (res)
-            return res;
-        else throw new HttpException('Нельзя удалять чужой список', HttpStatus.UNPROCESSABLE_ENTITY);
+        return this.wishlistsService.delete(req.user.id, id);
+
     }
 }

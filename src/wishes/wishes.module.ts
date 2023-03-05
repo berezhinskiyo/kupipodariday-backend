@@ -9,7 +9,7 @@ import { WishesController } from './wishes.controller';
 import { WishesService } from './wishes.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Wish]), TypeOrmModule.forFeature([User]), PassportModule],
+    imports: [TypeOrmModule.forFeature([Wish, User]), PassportModule],
     exports: [WishesService, UsersService],
     providers: [ConfigService, WishesService, UsersService],
     controllers: [WishesController],

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { WishesService } from 'src/wishes/wishes.service';
@@ -31,24 +31,24 @@ export class WishlistsService extends TypeOrmCrudService<WishList> {
   }
 
   async findById(id: number) {
-    return await this.repo.findOne({ where: { id }, relations: { items: true } });
+    return await this.repo.findOne({ where: { id }, relations: { items: true, owner: true } });
   }
   async update(userId: number, id: number, updateWishlistDto: UpdateWishlistDto) {
     const res = await this.findById(id);
-    if (res.owner?.id === userId) {
+    if (res.owner && res.owner.id === userId) {
       await this.repo.update(id, updateWishlistDto);
       return res;
     } else
-      return null;
+      throw new HttpException('Нельзя обновлять чужой список', HttpStatus.UNPROCESSABLE_ENTITY);
   }
 
   async delete(userId: number, id: number) {
     const res = await this.findById(id);
-    if (res.owner?.id === userId) {
+    if (res.owner && res.owner.id === userId) {
       await await this.repo.remove(res);
       return res;
     } else
-      return null;
+      throw new HttpException('Нельзя удалять чужой список', HttpStatus.UNPROCESSABLE_ENTITY);
 
   }
 

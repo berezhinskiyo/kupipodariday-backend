@@ -25,14 +25,6 @@ export class Wish extends BaseEntity {
   @Column('int', { nullable: true })
   price: number;
 
-
-
-  /*@Expose()
-    public get raised(): number {
-      return 
-    }
-  */
-
   @IsOptional()
   public raised: number;
 

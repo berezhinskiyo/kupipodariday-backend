@@ -14,12 +14,7 @@ export class UsersService extends TypeOrmCrudService<User> {
     private configService: ConfigService) {
     super(usersRepository);
   }
-  deletePasswordAndEmail = (user: User) => {
-    if (user) {
-      delete user['password'];
-      delete user['email'];
-    }
-  }
+
   async create(createUserDto: CreateUserDto) {
 
     const user = await this.repo.create(createUserDto);
@@ -28,7 +23,6 @@ export class UsersService extends TypeOrmCrudService<User> {
 
   async findMany(query: FindOptionsWhere<User> | FindOptionsWhere<User>[]) {
     const users = await this.repo.find({ where: query, relations: { wishes: true, offers: true, wishLists: true } });
-    users.forEach((user) => this.deletePasswordAndEmail(user));
     return users;
   }
 
@@ -37,15 +31,6 @@ export class UsersService extends TypeOrmCrudService<User> {
       where: { username }
 
     });
-    return user;
-  }
-
-  async findByUsernameWithoutPassword(username: string) {
-    const user = await this.repo.findOne({
-      where: { username }
-
-    });
-    this.deletePasswordAndEmail(user);
     return user;
   }
 
@@ -64,7 +49,6 @@ export class UsersService extends TypeOrmCrudService<User> {
       where: { id },
       relations: { wishes: true, offers: true, wishLists: true }
     });
-    this.deletePasswordAndEmail(user)
     return user;
   }
 
@@ -74,7 +58,6 @@ export class UsersService extends TypeOrmCrudService<User> {
       where: { username },
       relations: { wishes: true, offers: true, wishLists: true }
     });
-    this.deletePasswordAndEmail(user)
     return user;
   }
 

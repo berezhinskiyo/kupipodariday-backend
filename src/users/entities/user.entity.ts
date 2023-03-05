@@ -4,6 +4,7 @@ import { IsEmail, Length, IsUrl, IsNotEmpty } from 'class-validator';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
 import { WishList } from 'src/wishlists/entities/wishlist.entity';
+import { classToPlain, Exclude, instanceToPlain } from 'class-transformer';
 
 @Entity({ schema: 'nest_project' })
 export class User extends BaseEntity {
@@ -23,10 +24,12 @@ export class User extends BaseEntity {
   @Column()
   @IsNotEmpty()
   @IsEmail()
+  @Exclude()
   email: string;
 
   @Column()
   @IsNotEmpty()
+  @Exclude()
   password: string;
 
   @OneToMany(() => Wish, (wish) => wish.owner)
@@ -37,5 +40,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => WishList, (wl) => wl.owner)
   wishLists: WishList[];
+  
+  toJSON() {
+    return instanceToPlain(this);
+  }
 
 }
