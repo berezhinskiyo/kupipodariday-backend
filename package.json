@@ -47,6 +47,7 @@
     "@nestjs/testing": "^9.0.0",
     "@nestjsx/crud": "^5.0.0-alpha.3",
     "@types/bcrypt": "^5.0.0",
+    "@types/jest": "^29.4.0",
     "@types/node": "18.11.18",
     "@types/passport-jwt": "^3.0.8",
     "@typescript-eslint/eslint-plugin": "^5.0.0",

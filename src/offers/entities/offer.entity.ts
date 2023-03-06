@@ -8,7 +8,9 @@ export class Offer extends BaseEntity {
   @JoinColumn()
   user: User;
 
-  @ManyToOne(() => Wish, (wish) => wish.offers)
+  @ManyToOne(() => Wish, (wish) => wish.offers, {
+    onDelete: 'CASCADE'
+  })
   @JoinColumn()
   item: Wish;
 

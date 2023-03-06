@@ -8,7 +8,7 @@ import { SigninUserDto } from './dto/signin-user.dto';
 import { ConfigService } from '@nestjs/config';
 
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(
     private configService: ConfigService,
@@ -18,7 +18,6 @@ export class AuthController {
 
   @Post('signin')
   async signin(@Body() req: SigninUserDto) {
-
     const user = await this.authService.validatePassword(req.username, req.password);
     return this.authService.auth(user);
   }
