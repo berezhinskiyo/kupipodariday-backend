@@ -5,12 +5,15 @@ import { Wish } from 'src/wishes/entities/wish.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
 import { WishList } from 'src/wishlists/entities/wishlist.entity';
 import { classToPlain, Exclude, instanceToPlain } from 'class-transformer';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 @Entity({ schema: 'nest_project' })
+
 export class User extends BaseEntity {
   @Column()
   @IsNotEmpty()
   @Length(2, 30)
+  @ApiProperty()
   username: string;
 
   @Column({ nullable: true })
@@ -30,6 +33,7 @@ export class User extends BaseEntity {
   @Column()
   @IsNotEmpty()
   @Exclude()
+  @ApiHideProperty()
   password: string;
 
   @OneToMany(() => Wish, (wish) => wish.owner)
@@ -40,7 +44,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => WishList, (wl) => wl.owner)
   wishLists: WishList[];
-  
+
   toJSON() {
     return instanceToPlain(this);
   }

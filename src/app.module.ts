@@ -12,6 +12,7 @@ import configuration from './configuration';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { AuthModule } from './auth/auth.module';
+import { AppController } from './app.controller';
 
 const schema = Joi.object({
   database: Joi.object({
@@ -47,6 +48,7 @@ const schema = Joi.object({
     WishlistsModule,
     AuthModule,
   ],
+  controllers:[AppController]
 
 })
 export class AppModule { }

@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjsx/crud/lib/crud';
 import {
     IsNotEmpty,
     IsString,
@@ -9,6 +10,7 @@ import {
 export class CreateUserDto {
     @IsString()
     @IsNotEmpty()
+    @ApiProperty({ example: 'username' })
     username: string;
     @IsString()
     about: string;
